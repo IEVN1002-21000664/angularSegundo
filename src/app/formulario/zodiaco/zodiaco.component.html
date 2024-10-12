@@ -1,0 +1,39 @@
+<div class="container mx-auto">
+    <form [formGroup]="formGroup" (ngSubmit)="onImprimir()" class="max-w-sm mx-auto">
+      <div class="mb-5">
+        <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900">Nombre</label>
+        <input type="text" id="nombre" formControlName="nombre" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required />
+      </div>
+      <div class="mb-5">
+        <label for="apaterno" class="block mb-2 text-sm font-medium text-gray-900">Apellido Paterno</label>
+        <input type="text" id="apaterno" formControlName="apaterno" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required />
+      </div>
+      <div class="mb-5">
+        <label for="amaterno" class="block mb-2 text-sm font-medium text-gray-900">Apellido Materno</label>
+        <input type="text" id="amaterno" formControlName="amaterno" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required />
+      </div>
+      <div class="mb-5">
+        <label for="dia" class="block mb-2 text-sm font-medium text-gray-900">Día</label>
+        <input type="number" id="dia" formControlName="dia" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required />
+      </div>
+      <div class="mb-5">
+        <label for="mes" class="block mb-2 text-sm font-medium text-gray-900">Mes</label>
+        <input type="number" id="mes" formControlName="mes" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required />
+      </div>
+      <div class="mb-5">
+        <label for="anio" class="block mb-2 text-sm font-medium text-gray-900">Año</label>
+        <input type="number" id="anio" formControlName="anio" class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" required />
+      </div>
+      <div class="mb-5">
+        <label for="sexo" class="block mb-2 text-sm font-medium text-gray-900">Sexo</label>
+        <input type="radio" id="masculino" value="masculino" formControlName="sexo" /> Masculino
+        <input type="radio" id="femenino" value="femenino" formControlName="sexo" /> Femenino
+      </div>
+      <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-5 py-2.5">Imprimir</button>
+    </form>
+  
+    <div *ngIf="mostrarMensaje" class="mt-5">
+      <p>Hola {{ nombreCompleto }}. Tienes {{ edad }} años y tu signo zodiacal es {{ signo }}.</p>
+    </div>
+  </div>
+  
