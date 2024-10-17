@@ -1,76 +1,77 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // Importar CommonModule
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common'; 
 
 @Component({
   selector: 'app-zodiaco',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule], // Añadir CommonModule aquí
+  imports: [ReactiveFormsModule, NgIf],
   templateUrl: './zodiaco.component.html',
   styles: []
 })
-export class ZodiacoComponent implements OnInit {
+export default class ZodiacoComponent implements OnInit {
   formGroup!: FormGroup;
-  nombreCompleto: string = '';
-  edad: number = 0;
-  signo: string = '';
-  mostrarMensaje: boolean = false;
+  nombreCompleto!: string;
+  edad!: number;
+  signoChino!: string;
+  imagenSigno!: string;
+  mostrarMensaje = false;
+
+  signosChinos = [
+    { signo: 'Rata', imagen: 'https://www.clarin.com/img/westernastrology/rata.svg' },
+    { signo: 'Buey', imagen: 'https://www.clarin.com/img/westernastrology/bufalo.svg' },
+    { signo: 'Tigre', imagen: 'https://www.clarin.com/img/westernastrology/tigre.svg' },
+    { signo: 'Conejo', imagen: 'https://www.clarin.com/img/westernastrology/conejo.svg' },
+    { signo: 'Dragón', imagen: 'https://www.clarin.com/img/westernastrology/dragon.svg' },
+    { signo: 'Serpiente', imagen: 'https://www.clarin.com/img/westernastrology/serpiente.svg' },
+    { signo: 'Caballo', imagen: 'https://www.clarin.com/img/westernastrology/caballo.svg' },
+    { signo: 'Cabra', imagen: 'https://www.clarin.com/img/westernastrology/cabra.svg' },
+    { signo: 'Mono', imagen: 'https://www.clarin.com/img/westernastrology/mono.svg' },
+    { signo: 'Gallo', imagen: 'https://www.clarin.com/img/westernastrology/gallo.svg' },
+    { signo: 'Perro', imagen: 'https://www.clarin.com/img/westernastrology/perro.svg' },
+    { signo: 'Cerdo', imagen: 'https://www.clarin.com/img/westernastrology/chancho.svg' }
+  ];
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.formGroup = this.initForm();
-  }
-
-  initForm(): FormGroup {
-    return this.fb.group({
+    this.formGroup = this.fb.group({
       nombre: [''],
       apaterno: [''],
       amaterno: [''],
       dia: [''],
       mes: [''],
       anio: [''],
-      sexo: ['masculino']
+      sexo: ['']
     });
   }
 
-  calcularEdad(anio: number, mes: number, dia: number): number {
-    const hoy = new Date();
-    let edad = hoy.getFullYear() - anio;
-    const mesActual = hoy.getMonth() + 1;
-    const diaActual = hoy.getDate();
-
-    if (mes > mesActual || (mes === mesActual && dia > diaActual)) {
-      edad--;
-    }
-
-    return edad;
-  }
-
-  calcularSigno(dia: number, mes: number): string {
-    const signos = [
-      { nombre: 'Capricornio', inicio: { mes: 12, dia: 22 }, fin: { mes: 1, dia: 19 } },
-      { nombre: 'Acuario', inicio: { mes: 1, dia: 20 }, fin: { mes: 2, dia: 18 } },
-      { nombre: 'Piscis', inicio: { mes: 2, dia: 19 }, fin: { mes: 3, dia: 20 } },
-    ];
-
-    for (const signo of signos) {
-      if (
-        (mes === signo.inicio.mes && dia >= signo.inicio.dia) ||
-        (mes === signo.fin.mes && dia <= signo.fin.dia)
-      ) {
-        return signo.nombre;
-      }
-    }
-    return 'Desconocido';
-  }
-
-  onImprimir(): void {
+  onSubmit(): void {
     const { nombre, apaterno, amaterno, dia, mes, anio } = this.formGroup.value;
     this.nombreCompleto = `${nombre} ${apaterno} ${amaterno}`;
-    this.edad = this.calcularEdad(anio, mes, dia);
-    this.signo = this.calcularSigno(dia, mes);
+  
+    const fechaActual = new Date();
+    const anioActual = fechaActual.getFullYear();
+    const mesActual = fechaActual.getMonth() + 1; 
+    const diaActual = fechaActual.getDate();
+  
+    this.edad = anioActual - anio;
+    if (mes > mesActual || (mes === mesActual && dia > diaActual)) {
+      this.edad--; 
+    }
+  
+    const signoIndex = (anio - 4) % 12;
+  
+    if (signoIndex >= 0 && signoIndex < this.signosChinos.length) {
+      const signo = this.signosChinos[signoIndex];
+      this.signoChino = signo.signo;
+      this.imagenSigno = signo.imagen;
+    } else {
+      this.signoChino = 'Signo no encontrado';
+      this.imagenSigno = ''; 
+    }
+  
     this.mostrarMensaje = true;
   }
+  
 }
